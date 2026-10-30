@@ -86,6 +86,10 @@ button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:14px 18px
 .primary:disabled{opacity:.6;cursor:wait}
 .ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
 .soft{flex:1;background:var(--paper);color:var(--sub);border:1.5px solid var(--line)}
+.submit{display:block;width:100%;margin-top:26px;background:var(--amber);color:var(--navy);font-size:17px;padding:16px}
+.submit:disabled{opacity:.6;cursor:wait}
+.back-only{justify-content:center;margin-top:10px}
+.link{background:none;color:var(--sub);font-weight:600;font-size:14px;padding:8px 12px}
 .center{text-align:center}
 .done-ic{width:64px;height:64px;border-radius:50%;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;margin:6px auto 12px;font-size:30px;color:var(--navy)}
 [hidden]{display:none!important}
@@ -368,7 +372,8 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     <p class="hint">비워 두고 넘어가도 괜찮아요.</p>
     <textarea id="q13" name="q13" rows="4" maxlength="500" placeholder="자유롭게 적어 주세요"></textarea>
   </div>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" id="submitBtn" data-submit>제출하기</button></div>
+  <button type="button" class="submit" id="submitBtn" data-submit>응답 제출하기</button>
+  <div class="nav back-only"><button type="button" class="link" data-prev>← 이전 문항으로</button></div>
   <div class="err" id="sendErr" style="margin-top:10px">전송에 실패했어요. 네트워크를 확인하고 다시 눌러 주세요.</div>
 </section>
 
@@ -454,16 +459,19 @@ function goNext() {
 }
 function goPrev() { if (history.length) show(history.pop()); }
 
-// 하나만 고르는 문항: 다 답하면 자동으로 다음
-form.addEventListener('change', e => {
+// 하나만 고르는 문항: 다 답하면 자동으로 다음.
+// 이전으로 돌아와 이미 고른 보기를 다시 눌러도 넘어가도록 change가 아닌 click에서도 처리한다.
+function autoAdvance(e) {
   const step = e.target.closest('.step');
   const q = e.target.closest('.q');
   if (q) q.classList.remove('bad');
-  if (step && step.dataset.auto !== undefined && e.target.type === 'radio' && answered(step)) {
+  if (step && step === steps[cur] && step.dataset.auto !== undefined && e.target.type === 'radio' && answered(step)) {
     clearTimeout(autoTimer);
     autoTimer = setTimeout(goNext, AUTO_DELAY);
   }
-});
+}
+form.addEventListener('change', autoAdvance);
+form.addEventListener('click', e => { if (e.target.type === 'radio') autoAdvance(e); });
 
 // 기타 입력칸 켜고 끄기
 form.querySelectorAll('[data-etc]').forEach(cb => {
@@ -532,7 +540,7 @@ async function finish(screenOut) {
   const err = document.getElementById('sendErr');
   btn.disabled = true; btn.textContent = '보내는 중…'; err.style.display = 'none';
   const ok = await send(payload(screenOut));
-  btn.disabled = false; btn.textContent = '제출하기';
+  btn.disabled = false; btn.textContent = '응답 제출하기';
   if (!ok) { err.style.display = 'block'; if (screenOut) alert('전송에 실패했어요. 잠시 후 다시 시도해 주세요.'); return; }
   try { localStorage.setItem(DONE_KEY, '1'); } catch (e) {}
   if (screenOut) {
