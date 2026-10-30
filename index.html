@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MEMO'S 투자 메모 설문</title>
 <meta name="description" content="개인투자자의 종목 정보 관리 방식에 대한 3분 설문 (익명)">
-<meta name="survey-version" content="2026-10-30-v8">
+<meta name="survey-version" content="2026-10-30-v10">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root{
@@ -90,6 +90,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:14px 18px
 .submit{display:block;width:100%;margin-top:26px;background:var(--amber);color:var(--navy);font-size:17px;padding:16px}
 .submit:disabled{opacity:.6;cursor:wait}
 .back-only{justify-content:center;margin-top:10px}
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(244,242,236,.85);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--navy)}
 .link{background:none;color:var(--sub);font-weight:600;font-size:14px;padding:8px 12px}
 .center{text-align:center}
 .done-ic{width:64px;height:64px;border-radius:50%;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;margin:6px auto 12px;font-size:30px;color:var(--navy)}
@@ -111,13 +112,13 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
   <div class="sec">투자 메모 설문</div>
   <h1>종목 정보, 어떻게 관리하고 계세요?</h1>
   <p class="lead">개인투자자의 종목 정보 관리 방식을 알아보기 위한 설문입니다. 응답은 신한 스퀘어브릿지 창업 공모전 준비를 위한 통계 분석에만 사용되며, 개인을 식별할 수 있는 정보는 수집하지 않습니다. 정답은 없으니 편하게 응답해 주세요.</p>
-  <div class="chips"><span>13문항 · 약 3분</span><span>익명</span><span>로그인 없음</span><span>고르면 자동으로 넘어가요</span></div>
+  <div class="chips"><span>13문항 · 약 3분</span><span>익명</span><span>로그인 없음</span><span>객관식 위주</span></div>
   <div class="notice">※ 본 설문은 특정 종목이나 투자 행위를 권유하지 않습니다.</div>
   <div class="nav"><button type="button" class="primary" data-next>시작하기</button></div>
 </section>
 
 <!-- Q1 -->
-<section class="step card" data-id="q1" data-n="1" data-auto hidden>
+<section class="step card" data-id="q1" data-n="1" hidden>
   <div class="sec">A · 투자 경험</div>
   <fieldset class="q" data-req="q1">
     <legend><b>Q1.</b>현재 국내 주식에 투자하고 있나요?</legend>
@@ -128,11 +129,13 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     </div>
     <div class="err">하나를 선택해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="notice" id="q1out" hidden>이번 설문은 <b>현재 또는 과거에 주식 투자 경험이 있는 분</b>을 대상으로 하고 있어요. 투자 경험이 없다면 아래 버튼을 눌러 마쳐 주세요. 잘못 고르셨다면 위에서 다른 보기를 선택해 주세요.
+    <button type="button" class="soft" data-screenout style="width:100%;margin-top:10px">설문 마치기</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q2 -->
-<section class="step card" data-id="q2" data-n="2" data-auto hidden>
+<section class="step card" data-id="q2" data-n="2" hidden>
   <div class="sec">A · 투자 경험</div>
   <fieldset class="q" data-req="q2">
     <legend><b>Q2.</b>국내 주식 투자 경력은 얼마나 되나요? (과거 경력 포함)</legend>
@@ -144,11 +147,11 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     </div>
     <div class="err">하나를 선택해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q3 -->
-<section class="step card" data-id="q3" data-n="3" data-auto hidden>
+<section class="step card" data-id="q3" data-n="3" hidden>
   <div class="sec">A · 투자 경험</div>
   <fieldset class="q" data-req="q3">
     <legend><b>Q3.</b>보유·관심 종목의 소식(뉴스, 공시, 주가)을 얼마나 자주 확인하나요?</legend>
@@ -161,11 +164,11 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     </div>
     <div class="err">하나를 선택해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q4 -->
-<section class="step card" data-id="q4" data-n="4" data-auto hidden>
+<section class="step card" data-id="q4" data-n="4" hidden>
   <div class="sec">A · 투자 경험</div>
   <fieldset class="q" data-req="q4">
     <legend><b>Q4.</b>지금 보유하거나 지켜보는 종목은 몇 개인가요?</legend>
@@ -177,7 +180,7 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     </div>
     <div class="err">하나를 선택해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q5 (복수) -->
@@ -205,7 +208,7 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
 </section>
 
 <!-- Q6 (2줄, 둘 다 고르면 자동) -->
-<section class="step card" data-id="q6" data-n="6" data-auto hidden>
+<section class="step card" data-id="q6" data-n="6" hidden>
   <div class="sec">B · 최근 경험</div>
   <fieldset class="q" data-req="q6_1,q6_2">
     <legend><b>Q6.</b>최근 3개월 안에 이런 일이 있었나요?</legend>
@@ -223,11 +226,11 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
       </div></div>
     <div class="err">두 문장 모두 답해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q7 (2줄, 둘 다 고르면 자동) -->
-<section class="step card" data-id="q7" data-n="7" data-auto hidden>
+<section class="step card" data-id="q7" data-n="7" hidden>
   <div class="sec">B · 불편한 정도</div>
   <fieldset class="q" data-req="q7_1,q7_2">
     <legend><b>Q7.</b>다음 문장에 얼마나 동의하나요?</legend>
@@ -250,11 +253,11 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
       </div><div class="ends"><span>전혀 아니다</span><span>매우 그렇다</span></div></div>
     <div class="err">두 문장 모두 답해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q8 -->
-<section class="step card" data-id="q8" data-n="8" data-auto hidden>
+<section class="step card" data-id="q8" data-n="8" hidden>
   <div class="sec">B · 지금 쓰는 방법</div>
   <fieldset class="q" data-req="q8">
     <legend><b>Q8.</b>증권사 앱의 가격·뉴스 알림을 써 본 적이 있나요?</legend>
@@ -266,11 +269,11 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     </div>
     <div class="err">하나를 선택해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q9 (서비스 설명 + 사용 의향) -->
-<section class="step card big" data-id="q9" data-n="9" data-auto hidden>
+<section class="step card big" data-id="q9" data-n="9" hidden>
   <div class="sec">C · 이런 서비스는 어떠세요?</div>
   <div class="svc"><span class="k">서비스 소개</span>종목별로 투자 메모를 적어 두면, AI가 그 메모와 관련된 <b>공시·뉴스·주가 조건 도달</b>(예: 20만 원 아래로 하락)을 찾아 <b>출처와 함께</b> 알려주는 서비스입니다. 매수·매도 추천은 하지 않으며, 내가 남긴 메모와 이후의 변화를 함께 볼 수 있어 나중에 판단을 돌아보기 쉽습니다.</div>
   <figure class="shot">
@@ -288,7 +291,7 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     </div><div class="ends"><span>전혀 사용하고 싶지 않다</span><span>매우 사용하고 싶다</span></div>
     <div class="err">점수를 선택해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q9-1 (1·2점일 때만, 복수) -->
@@ -331,7 +334,7 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
 </section>
 
 <!-- Q11 -->
-<section class="step card" data-id="q11" data-n="11" data-auto hidden>
+<section class="step card" data-id="q11" data-n="11" hidden>
   <div class="sec">C · 가격</div>
   <fieldset class="q" data-req="q11">
     <legend><b>Q11.</b>이 서비스에 매월 낼 수 있다고 생각하는 최대 금액은?</legend>
@@ -345,11 +348,11 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     </div>
     <div class="err">하나를 선택해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q12 -->
-<section class="step card" data-id="q12" data-n="12" data-auto hidden>
+<section class="step card" data-id="q12" data-n="12" hidden>
   <div class="sec">D · 거의 다 왔어요</div>
   <fieldset class="q" data-req="q12">
     <legend><b>Q12.</b>연령대를 선택해 주세요.</legend>
@@ -362,7 +365,7 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     </div>
     <div class="err">하나를 선택해 주세요.</div>
   </fieldset>
-  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="soft" data-next>다음</button></div>
+  <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
 <!-- Q13 (선택 서술 + 제출) -->
@@ -387,6 +390,7 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
 
 </form>
 <footer>MEMO'S</footer>
+<div id="sendingOverlay" class="overlay" hidden><div>응답을 보내는 중이에요…</div></div>
 </main>
 
 <script>
@@ -405,7 +409,7 @@ const DONE_KEY = 'memos_survey_done_v1';
 const ref = new URLSearchParams(location.search).get('r') || '';
 
 let cur = 0;
-let history = [];
+let trail = [];
 let autoTimer = null;
 let tapLockUntil = 0;
 let lastAutoAt = 0;
@@ -456,11 +460,11 @@ function nextIndex() {
 
 function goNext() {
   if (!validStep(steps[cur])) return;
-  if (steps[cur].dataset.id === 'q1' && get('q1') === '관심만') { finish(true); return; }
-  history.push(cur);
+  if (steps[cur].dataset.id === 'q1' && get('q1') === '관심만') { document.getElementById('q1out').hidden = false; return; }
+  trail.push(cur);
   show(nextIndex());
 }
-function goPrev() { if (history.length) show(history.pop()); }
+function goPrev() { if (trail.length) show(trail.pop()); }
 
 // 하나만 고르는 문항: 다 답하면 자동으로 다음.
 // 이전으로 돌아와 이미 고른 보기를 다시 눌러도 넘어가도록 change가 아닌 click에서도 처리한다.
@@ -468,6 +472,11 @@ function autoAdvance(e) {
   const step = e.target.closest('.step');
   const q = e.target.closest('.q');
   if (q) q.classList.remove('bad');
+  if (step && step.dataset.id === 'q1') {
+    const out = get('q1') === '관심만';
+    document.getElementById('q1out').hidden = !out;
+    if (out) { clearTimeout(autoTimer); return; }
+  }
   if (step && step === steps[cur] && step.dataset.auto !== undefined && e.target.type === 'radio' && answered(step)) {
     clearTimeout(autoTimer);
     autoTimer = setTimeout(() => { lastAutoAt = Date.now(); goNext(); }, AUTO_DELAY);
@@ -538,11 +547,17 @@ async function send(data) {
   } catch (e) { return false; }
 }
 
+let sending = false;
 async function finish(screenOut) {
+  if (sending) return;
+  sending = true;
+  document.getElementById('sendingOverlay').hidden = false;
   const btn = document.getElementById('submitBtn');
   const err = document.getElementById('sendErr');
   btn.disabled = true; btn.textContent = '보내는 중…'; err.style.display = 'none';
   const ok = await send(payload(screenOut));
+  sending = false;
+  document.getElementById('sendingOverlay').hidden = true;
   btn.disabled = false; btn.textContent = '응답 제출하기';
   if (!ok) { err.style.display = 'block'; if (screenOut) alert('전송에 실패했어요. 잠시 후 다시 시도해 주세요.'); return; }
   try { localStorage.setItem(DONE_KEY, '1'); } catch (e) {}
@@ -555,12 +570,15 @@ async function finish(screenOut) {
 
 form.addEventListener('click', e => {
   const t = e.target;
+  if (sending && t.matches('button')) return;
   if (t.matches('[data-next],[data-submit]') && (Date.now() < tapLockUntil || Date.now() - lastAutoAt < AUTO_GUARD)) {
     // 제출 화면에서는 연타가 이어지는 동안 계속 막는다 (잠깐 멈췄다 다시 눌러야 제출)
     if (steps[cur].dataset.id === 'q13') tapLockUntil = Date.now() + SUBMIT_GUARD;
     return;
   }
+  if (t.matches('[data-prev],[data-screenout]') && Date.now() < tapLockUntil) return;
   if (t.matches('[data-prev]')) goPrev();
+  else if (t.matches('[data-screenout]')) { if (get('q1') === '관심만') finish(true); }
   else if (t.matches('[data-next]')) goNext();
   else if (t.matches('[data-submit]')) { if (validStep(steps[cur])) finish(false); }
 });
