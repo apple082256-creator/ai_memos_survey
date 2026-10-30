@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MEMO'S 투자 메모 설문</title>
 <meta name="description" content="개인투자자의 종목 정보 관리 방식에 대한 3분 설문 (익명)">
-<meta name="survey-version" content="2026-10-30-v10">
+<meta name="survey-version" content="2026-10-30-v11">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root{
@@ -129,8 +129,6 @@ footer{text-align:center;font-size:12px;color:var(--sub);margin-top:22px}
     </div>
     <div class="err">하나를 선택해 주세요.</div>
   </fieldset>
-  <div class="notice" id="q1out" hidden>이번 설문은 <b>현재 또는 과거에 주식 투자 경험이 있는 분</b>을 대상으로 하고 있어요. 투자 경험이 없다면 아래 버튼을 눌러 마쳐 주세요. 잘못 고르셨다면 위에서 다른 보기를 선택해 주세요.
-    <button type="button" class="soft" data-screenout style="width:100%;margin-top:10px">설문 마치기</button></div>
   <div class="nav"><button type="button" class="ghost" data-prev>이전</button><button type="button" class="primary" data-next>다음</button></div>
 </section>
 
@@ -460,7 +458,7 @@ function nextIndex() {
 
 function goNext() {
   if (!validStep(steps[cur])) return;
-  if (steps[cur].dataset.id === 'q1' && get('q1') === '관심만') { document.getElementById('q1out').hidden = false; return; }
+  if (steps[cur].dataset.id === 'q1' && get('q1') === '관심만') { finish(true); return; }
   trail.push(cur);
   show(nextIndex());
 }
@@ -472,11 +470,6 @@ function autoAdvance(e) {
   const step = e.target.closest('.step');
   const q = e.target.closest('.q');
   if (q) q.classList.remove('bad');
-  if (step && step.dataset.id === 'q1') {
-    const out = get('q1') === '관심만';
-    document.getElementById('q1out').hidden = !out;
-    if (out) { clearTimeout(autoTimer); return; }
-  }
   if (step && step === steps[cur] && step.dataset.auto !== undefined && e.target.type === 'radio' && answered(step)) {
     clearTimeout(autoTimer);
     autoTimer = setTimeout(() => { lastAutoAt = Date.now(); goNext(); }, AUTO_DELAY);
@@ -576,9 +569,8 @@ form.addEventListener('click', e => {
     if (steps[cur].dataset.id === 'q13') tapLockUntil = Date.now() + SUBMIT_GUARD;
     return;
   }
-  if (t.matches('[data-prev],[data-screenout]') && Date.now() < tapLockUntil) return;
+  if (t.matches('[data-prev]') && Date.now() < tapLockUntil) return;
   if (t.matches('[data-prev]')) goPrev();
-  else if (t.matches('[data-screenout]')) { if (get('q1') === '관심만') finish(true); }
   else if (t.matches('[data-next]')) goNext();
   else if (t.matches('[data-submit]')) { if (validStep(steps[cur])) finish(false); }
 });
